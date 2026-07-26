@@ -150,3 +150,4 @@ The frontend communicates with the Java Spring Boot REST API on `http://localhos
 * **Map Data**: © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, [CARTO](https://carto.com/), and [Esri](https://www.esri.com/).
 * **Weather Data**: Powered by [OpenWeatherMap API](https://openweathermap.org/).
 * **License**: Developed as an open-source, full-stack enterprise portfolio demonstration.
+Testing YOLO Achievement
