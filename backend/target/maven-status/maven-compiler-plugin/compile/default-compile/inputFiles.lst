@@ -1,0 +1,13 @@
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\ClimateCueApplication.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\config\WebConfig.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\controller\WeatherController.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\dto\AirQualityDto.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\dto\DailyForecastDto.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\dto\FavoriteCityDto.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\dto\HourlyForecastDto.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\dto\SearchHistoryDto.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\dto\WeatherResponse.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\exception\GlobalExceptionHandler.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\exception\WeatherException.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\service\UserPreferencesService.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\service\WeatherService.java

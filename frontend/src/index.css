@@ -1,0 +1,351 @@
+:root {
+  /* Default / Dark Theme Tokens */
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --bg-primary: #0f172a;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-accent: #38bdf8;
+  
+  --glass-bg: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-hover: rgba(51, 65, 85, 0.8);
+  
+  --card-bg: rgba(15, 23, 42, 0.65);
+  --accent-color: #38bdf8;
+  --accent-gradient: linear-gradient(135deg, #0ea5e9, #6366f1);
+  --danger-color: #ef4444;
+  --warning-color: #f59e0b;
+  --success-color: #10b981;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f0fdf4;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-accent: #0284c7;
+
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
+  --glass-hover: rgba(241, 245, 249, 0.9);
+  
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --accent-color: #0284c7;
+  --accent-gradient: linear-gradient(135deg, #0284c7, #4f46e5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* --- Dynamic Background Weather Themes --- */
+.app-container {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  transition: background 1s ease;
+  padding-bottom: 3rem;
+}
+
+.bg-sunny {
+  background: radial-gradient(circle at top right, rgba(251, 191, 36, 0.25), transparent 60%),
+              radial-gradient(circle at bottom left, rgba(249, 115, 22, 0.15), transparent 50%),
+              var(--bg-primary);
+}
+
+.bg-cloudy {
+  background: radial-gradient(circle at top, rgba(148, 163, 184, 0.25), transparent 70%),
+              radial-gradient(circle at bottom, rgba(100, 116, 139, 0.2), transparent 60%),
+              var(--bg-primary);
+}
+
+.bg-rainy {
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.3), transparent 70%),
+              radial-gradient(circle at bottom right, rgba(30, 58, 138, 0.35), transparent 60%),
+              var(--bg-primary);
+}
+
+.bg-storm {
+  background: radial-gradient(circle at center, rgba(124, 58, 237, 0.25), transparent 65%),
+              radial-gradient(circle at top right, rgba(15, 23, 42, 0.8), transparent 80%),
+              var(--bg-primary);
+}
+
+.bg-snow {
+  background: radial-gradient(circle at top right, rgba(224, 242, 254, 0.25), transparent 60%),
+              radial-gradient(circle at bottom left, rgba(186, 230, 253, 0.2), transparent 50%),
+              var(--bg-primary);
+}
+
+.bg-night {
+  background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.25), transparent 60%),
+              radial-gradient(circle at bottom left, rgba(30, 27, 75, 0.5), transparent 70%),
+              var(--bg-primary);
+}
+
+.bg-fog {
+  background: radial-gradient(circle at center, rgba(203, 213, 225, 0.25), transparent 70%),
+              var(--bg-primary);
+}
+
+/* --- Glassmorphism & Core Panels --- */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.4);
+}
+
+.glass-button {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+}
+
+.glass-button:hover {
+  background: var(--glass-hover);
+  transform: translateY(-1px);
+}
+
+.glass-button:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--accent-gradient);
+  color: white;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 4px 14px 0 rgba(14, 165, 233, 0.39);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
+}
+
+/* --- Layout Wrappers --- */
+.main-content {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* --- Skeleton Shimmer Loader --- */
+.skeleton {
+  background: linear-gradient(90deg, var(--glass-bg) 25%, var(--glass-hover) 50%, var(--glass-bg) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+}
+
+/* --- Scrollbar Styling --- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* --- Responsive Utility --- */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
+}
+
+/* --- Handcrafted 3D Card & Glassmorphism Design System --- */
+.glass-panel-3d {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  box-shadow: 
+    0 20px 40px -15px rgba(0, 0, 0, 0.4),
+    0 0 1px 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+  will-change: transform, box-shadow;
+}
+
+.glass-panel-3d:hover {
+  transform: translateY(-5px) translateZ(0);
+  box-shadow: 
+    0 30px 60px -15px rgba(0, 0, 0, 0.55),
+    0 0 30px rgba(56, 189, 248, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.card-elevation-hover {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-elevation-hover:hover {
+  transform: translateY(-4px) scale3d(1.01, 1.01, 1.01);
+  box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.45);
+}
+
+/* Subtle 3D Floating Weather Badges */
+.floating-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.floating-badge:hover {
+  transform: translateY(-3px) scale3d(1.08, 1.08, 1.08);
+}
+
+/* GPU Accelerated Keyframe Animations for Parallax Clouds & Icons */
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, -10px, 0) rotate(1.5deg); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-6px, -14px, 0); }
+}
+
+@keyframes cloud-drift {
+  0% { transform: translate3d(-5%, 0, 0); }
+  50% { transform: translate3d(5%, -4px, 0); }
+  100% { transform: translate3d(-5%, 0, 0); }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-medium {
+  animation: float-medium 4.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-cloud-drift {
+  animation: cloud-drift 14s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* --- Accessibility & Performance: Reduced Motion & Animations Toggle --- */
+[data-animations="disabled"] *,
+[data-animations="disabled"] *::before,
+[data-animations="disabled"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  overflow-x: hidden;
+}

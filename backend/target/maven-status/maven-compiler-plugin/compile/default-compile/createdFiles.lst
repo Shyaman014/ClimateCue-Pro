@@ -1,0 +1,13 @@
+com\climatecue\ClimateCueApplication.class
+com\climatecue\dto\DailyForecastDto.class
+com\climatecue\config\WebConfig.class
+com\climatecue\dto\HourlyForecastDto.class
+com\climatecue\dto\WeatherResponse.class
+com\climatecue\exception\GlobalExceptionHandler.class
+com\climatecue\service\WeatherService.class
+com\climatecue\dto\SearchHistoryDto.class
+com\climatecue\dto\AirQualityDto.class
+com\climatecue\exception\WeatherException.class
+com\climatecue\controller\WeatherController.class
+com\climatecue\service\UserPreferencesService.class
+com\climatecue\dto\FavoriteCityDto.class
