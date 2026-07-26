@@ -1,31 +1,39 @@
-# 🌐 ClimateCue — Frontend Dashboard & 3D Experience
+# 🌐 ClimateCue — Frontend Dashboard & Handcrafted 3D Experience
 
 <div align="center">
-  <h3>Next-Generation Weather Intelligence & Atmospheric Simulation Platform</h3>
-  <p>Built with <strong>React 18</strong>, <strong>Vite 5</strong>, <strong>Three.js / React Three Fiber</strong>, and <strong>Leaflet</strong>.</p>
+  <h3>Next-Generation Weather Intelligence with Apple Weather &amp; Linear Aesthetics</h3>
+  <p>Built with <strong>React 18</strong>, <strong>Vite 5</strong>, <strong>CSS 3D Transforms</strong>, and <strong>Leaflet</strong>.</p>
 </div>
 
 ---
 
 ## ✨ Overview
 
-**ClimateCue Frontend** is a portfolio-grade, state-of-the-art web application designed to deliver real-time meteorological insights with unparalleled visual fidelity. Moving beyond static charts, ClimateCue immerses users in live weather conditions through **3D interactive globes**, **volumetric atmospheric particle simulations**, **English-only global live radar mapping**, and **responsive glassmorphic aesthetics**.
+**ClimateCue Frontend** is a portfolio-grade, state-of-the-art web application designed to deliver real-time meteorological insights with unparalleled visual fidelity. Moving beyond generic templates, ClimateCue immerses users in live weather conditions through **handcrafted 3D perspective tilt cards**, **60 FPS GPU-accelerated atmospheric particle simulations**, **English-only global live radar mapping**, and a **clutter-free professional information hierarchy**.
 
 ---
 
 ## 🚀 Key Features
 
-### 🌍 1. Interactive 3D Weather Environment (`@react-three/fiber` & `three.js`)
-* **Interactive 3D Globe**: Orbit, zoom, and pan across a dynamically rendered globe featuring atmospheric glow lighting and real-time geographic marker pins.
-* **Live Atmospheric Particle Systems**: Custom 3D particle simulations adapted to real-time weather conditions:
-  * 🌧️ **Rain**: Realistic falling water droplets with dynamic wind velocities.
-  * ❄️ **Snow**: Drifting snowflakes with natural lateral sway.
-  * ☁️ **Clouds**: Volumetric cloud formations floating through 3D space.
-  * ☀️ **Sun Rays**: Radiant sunbeams for clear daytime conditions.
-  * 🌌 **Starfield**: Twinkling night sky simulation for clear evenings.
-* **Performance Control**: Includes a dedicated one-click toggle to pause/resume 3D animations for battery saving or accessibility.
+### 🎨 1. Professional Information Hierarchy & Zero Duplication
+* **ONE Premium Hero Weather Card**: Stands prominently at the top of the dashboard, presenting exclusively location telemetry, real-time clock, large 3D floating weather condition badge, primary temperature, condition, feels-like temperature, and action buttons.
+* **Clutter-Free Architecture**: Every meteorological data point is displayed **exactly once** across purpose-driven vertical sections:
+  * 🌡️ **Hourly Forecast**: 24-hour scrollable timeline with temperature progression.
+  * 📅 **7-Day Forecast**: Extended outlook with daily low/high range bars.
+  * 📊 **Weather Metrics Grid**: 6 distinct physical metrics (UV Index, Humidity & Dew Point, Wind Speed & Gust, Atmospheric Pressure, Visibility, Cloud Cover).
+  * 🫁 **Air Quality Console (`AirQualityCard`)**: Numerical EPA AQI (1-5), category badges, pollutant health advice, and color-coded severity progress bar.
+  * 🌅 **Sunrise & Sunset Console (`SolarCycleCard`)**: Daylight arc percentage progress, sunrise/sunset timestamps, and lunar cycle illumination.
+  * 📈 **Interactive Analytics (`WeatherCharts`)**: Recharts-powered 24-hour temperature, precipitation, and wind trends.
 
-### 🗺️ 2. English-Only Global Live Radar Map (`Leaflet`)
+### 🌌 2. 60 FPS GPU-Accelerated Particle Weather Engine (`AtmosphericBackground`)
+* **Lightweight Hardware Compositing**: Replaced heavy CPU 3D wireframe models with pure-CSS hardware-accelerated particle systems (`transform: translate3d(...)`) running at a rock-solid 60 FPS:
+  * 🌧️ **Rain & Drizzle**: Diagonal falling water droplet streaks with wind slant.
+  * ❄️ **Snow**: Drifting glowing snowflakes with natural lateral sway.
+  * ☁️ **Clouds**: Volumetric, multi-layered ambient cloud strips with slow parallax drift.
+  * ☀️ **Clear / Sunny**: Warm floating golden sunshine motes that pulse gently.
+* **Reduced Motion Compliance**: Automatically detects `prefers-reduced-motion` and includes a built-in one-click toggle in Settings to pause/resume animations instantly.
+
+### 🗺️ 3. English-Only Global Live Radar Map (`Leaflet` & `WeatherMap`)
 * **Guaranteed English-Only Labels**: Uses a custom multi-layered tile architecture combining **CartoDB Dark Matter (No-Labels)** with **Esri World Dark Gray Reference** and **Esri Boundaries & Places**. Regardless of the country or city searched (Tokyo, Beijing, Moscow, Riyadh, etc.), all map labels are rendered strictly in English.
 * **Interactive Radar Layers**: Switch between live OpenWeatherMap radar overlays:
   * 💧 **Precipitation** Radar
@@ -33,23 +41,16 @@
   * 🌡️ **Temperature** Heatmap
   * 💨 **Wind Speed** Vectors
 
-### ⚙️ 3. Unified Global Settings & State Persistence
+### ⚙️ 4. Unified Global Settings & State Persistence (`SettingsContext`)
 * **Instant Unit Conversion**: Switch effortlessly between Celsius (°C) and Fahrenheit (°F), as well as Wind Speed units (`m/s`, `km/h`, `mph`) without re-fetching API data.
 * **Internationalization (i18n)**: Seamless translation support across **English (`en`)**, **Spanish (`es`)**, **French (`fr`)**, **German (`de`)**, and **Japanese (`ja`)**.
 * **Theme Customization**: Frosted obsidian Dark mode, crystal Light mode, and Auto day/night synchronization.
 * **Persistent Preferences**: All user customization settings are automatically saved and synced via `localStorage`.
 
-### 🎨 4. Premium Glassmorphic UI & Analytics
-* **Dynamic Background Gradients**: Smooth CSS transitions that adapt in real time to the current weather category.
-* **Comprehensive Metrics**: Air Quality Index (AQI), UV Index, Dew Point, Humidity, Visibility, Atmospheric Pressure, and Solar/Lunar cycles.
-* **Interactive Visualizations**: Recharts-powered 24-hour temperature/precipitation trends and 7-day extended forecasts.
-* **Exportable Reports**: Generate and download instant PDF weather summaries or capture high-resolution screenshot cards using `html2canvas` and `jspdf`.
-
-### ♿ 5. Accessibility (WCAG AA) & Resilience
-* **Keyboard Navigation & ARIA**: Complete screen reader compliance (`role="region"`, `role="alert"`, `aria-live="assertive"`) and `tabIndex={0}` scrolling containers.
-* **Reduced Motion Compliance**: Automatically detects `prefers-reduced-motion` and applies CSS overrides to freeze animations for sensitive users.
-* **Offline Resilience**: Features automatic network loss detection that alerts users via a non-intrusive status banner while continuing to display cached data.
-* **Code Splitting & Optimization**: Uses `React.lazy()` and `<Suspense>` boundaries for Three.js and charting libraries, delivering sub-second initial load times.
+### ♿ 5. WCAG AA Accessibility & Exportable Intelligence
+* **Full Screen Reader Support**: Complete ARIA attributes (`role="region"`, `role="alert"`, `aria-live="assertive"`) and keyboard navigation across all interactive elements.
+* **Offline Resilience**: Automatic network loss detection that alerts users via a sleek status banner while continuing to serve cached telemetry.
+* **One-Click Export Tools**: Generate instant PDF weather reports (`jspdf`) or capture high-resolution screenshot cards (`html2canvas`).
 
 ---
 
@@ -58,8 +59,8 @@
 | Component | Technology | Description |
 | :--- | :--- | :--- |
 | **Core Framework** | [React 18](https://react.dev/) + [Vite 5](https://vitejs.dev/) | High-performance SPA with Lightning-fast HMR |
-| **3D Engine** | [Three.js](https://threejs.org/) & [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) | Hardware-accelerated 3D graphics and particle systems |
-| **Mapping Engine** | [Leaflet](https://leafletjs.com/) | Interactive tiled maps with custom glowing HTML markers |
+| **3D & Animations** | CSS 3D Transforms (`perspective`, `scale3d`) | Hardware-accelerated GPU tilt mechanics & particles |
+| **Mapping Engine** | [Leaflet](https://leafletjs.com/) | Interactive tiled maps with CartoDB English tiles |
 | **Data Visualization** | [Recharts](https://recharts.org/) | Responsive SVG charts and forecast trends |
 | **Icons & Design** | [Lucide React](https://lucide.dev/) | Crisp, consistent modern vector iconography |
 | **Report Generation** | `jspdf` & `html2canvas` | Client-side PDF generation and canvas capturing |
@@ -111,6 +112,8 @@ The frontend expects a REST API backend running on `http://localhost:8081` with 
 
 ---
 
-## 📄 License
+## 📄 License & Attribution
 
-This project is open-source and developed as a production-grade portfolio demonstration.
+* **Map Data**: © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, [CARTO](https://carto.com/), and [Esri](https://www.esri.com/).
+* **Weather Data**: Powered by [OpenWeatherMap API](https://openweathermap.org/).
+* **License**: This project is developed as an open-source portfolio demonstration.
