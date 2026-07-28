@@ -1,4 +1,5 @@
-const API_BASE = 'http://localhost:8081/api/weather';
+// Fallback for vanilla JS script if it's still being used
+const API_BASE = import.meta.env?.VITE_API_URL || 'https://climatecue-pro-production.up.railway.app/api/weather';
 
 const elements = {
   cityInput: document.getElementById('cityInput'),

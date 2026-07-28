@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import axios from 'axios';
+import axiosClient from './api/axiosClient';
 import './index.css';
 
 import { SettingsProvider } from './context/SettingsContext';
@@ -20,7 +20,7 @@ import SolarCycleCard from './components/SolarCycleCard';
 const WeatherCharts = lazy(() => import('./components/WeatherCharts'));
 const WeatherMap = lazy(() => import('./components/WeatherMap'));
 
-const API_BASE = 'http://localhost:8081/api/weather';
+// API URLs are handled by axiosClient internally
 
 function WeatherAppContent() {
   const [city, setCity] = useState('London');
@@ -68,9 +68,13 @@ function WeatherAppContent() {
   // Load preferences (favorites & history) on mount
   const fetchPreferences = useCallback(async () => {
     try {
+      // Check health first (fail silently for preferences)
+      const baseUrl = axiosClient.defaults.baseURL.replace('/api/weather', '/api/health');
+      await axiosClient.get(baseUrl, { timeout: 3000 });
+
       const [favRes, histRes] = await Promise.all([
-        axios.get(`${API_BASE}/favorites`),
-        axios.get(`${API_BASE}/history`)
+        axiosClient.get(`/favorites`),
+        axiosClient.get(`/history`)
       ]);
       setFavorites(favRes.data || []);
       setSearchHistory(histRes.data || []);
@@ -89,15 +93,23 @@ function WeatherAppContent() {
     setError(null);
 
     try {
+      // API Health Check
+      try {
+        const baseUrl = axiosClient.defaults.baseURL.replace('/api/weather', '/api/health');
+        await axiosClient.get(baseUrl, { timeout: 5000 });
+      } catch (healthErr) {
+        throw new Error('Backend is unavailable. It might be starting up from sleep mode.');
+      }
+
       const queryParams = coords 
         ? `lat=${coords.lat}&lon=${coords.lon}` 
         : `city=${encodeURIComponent(city)}`;
 
       const [currentRes, hourlyRes, dailyRes, aqiRes] = await Promise.all([
-        axios.get(`${API_BASE}/current?${queryParams}`),
-        axios.get(`${API_BASE}/hourly?${queryParams}`),
-        axios.get(`${API_BASE}/forecast?${queryParams}`),
-        axios.get(`${API_BASE}/air-quality?${queryParams}`)
+        axiosClient.get(`/current?${queryParams}`),
+        axiosClient.get(`/hourly?${queryParams}`),
+        axiosClient.get(`/forecast?${queryParams}`),
+        axiosClient.get(`/air-quality?${queryParams}`)
       ]);
 
       setWeatherData(currentRes.data);
@@ -108,7 +120,7 @@ function WeatherAppContent() {
       // Refresh history list after a successful search
       fetchPreferences();
     } catch (err) {
-      const errMsg = err.response?.data?.message || err.message || 'Failed to fetch weather data from server';
+      const errMsg = err.userFriendlyMessage || err.message || 'Failed to fetch weather data from server';
       setError(errMsg);
     } finally {
       setLoading(false);
@@ -168,7 +180,7 @@ function WeatherAppContent() {
   const handleToggleFavorite = async (weather) => {
     try {
       if (isFavorite) {
-        await axios.delete(`${API_BASE}/favorites?cityName=${encodeURIComponent(weather.cityName)}`);
+        await axiosClient.delete(`/favorites?cityName=${encodeURIComponent(weather.cityName)}`);
         showToast(`Removed ${weather.cityName} from favorites ⭐`);
       } else {
         const favDto = {
@@ -178,7 +190,7 @@ function WeatherAppContent() {
           longitude: weather.longitude,
           addedAt: Date.now()
         };
-        await axios.post(`${API_BASE}/favorites`, favDto);
+        await axiosClient.post(`/favorites`, favDto);
         showToast(`Added ${weather.cityName} to favorites! ⭐`);
       }
       fetchPreferences();
@@ -189,7 +201,7 @@ function WeatherAppContent() {
 
   const handleRemoveFavorite = async (cityName) => {
     try {
-      await axios.delete(`${API_BASE}/favorites?cityName=${encodeURIComponent(cityName)}`);
+      await axiosClient.delete(`/favorites?cityName=${encodeURIComponent(cityName)}`);
       showToast(`Removed ${cityName} from favorites`);
       fetchPreferences();
     } catch (e) {
@@ -199,7 +211,7 @@ function WeatherAppContent() {
 
   const handleClearHistory = async () => {
     try {
-      await axios.delete(`${API_BASE}/history`);
+      await axiosClient.delete(`/history`);
       setSearchHistory([]);
       showToast('Search history cleared 🗑️');
     } catch (e) {

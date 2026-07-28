@@ -24,7 +24,7 @@ export default function ErrorDisplay({ error, onRetry, onReset }) {
     if (errLower.includes('network') || errLower.includes('fetch') || errLower.includes('failed') || errLower.includes('connect')) {
       return {
         title: 'Connection or API Error',
-        message: error || 'Unable to connect to the ClimateCue backend servers. Please check if the Spring Boot server is running on port 8081.',
+        message: error || 'Unable to connect to the ClimateCue backend servers. The service might be temporarily unavailable or restarting.',
         icon: <WifiOff size={48} color="#38bdf8" />,
         actionText: 'Retry Connection'
       };
