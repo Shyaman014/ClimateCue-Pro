@@ -68,9 +68,7 @@ function WeatherAppContent() {
   // Load preferences (favorites & history) on mount
   const fetchPreferences = useCallback(async () => {
     try {
-      // Check health first (fail silently for preferences)
-      const baseUrl = axiosClient.defaults.baseURL.replace('/api/weather', '/api/health');
-      await axiosClient.get(baseUrl, { timeout: 3000 });
+      // Removed redundant health check to avoid race conditions with fetchAllWeather
 
       const [favRes, histRes] = await Promise.all([
         axiosClient.get(`/favorites`),
@@ -95,8 +93,13 @@ function WeatherAppContent() {
     try {
       // API Health Check
       try {
-        const baseUrl = axiosClient.defaults.baseURL.replace('/api/weather', '/api/health');
-        await axiosClient.get(baseUrl, { timeout: 5000 });
+        let healthUrl = axiosClient.defaults.baseURL;
+        if (healthUrl.includes('/api/weather')) {
+          healthUrl = healthUrl.replace(/\/api\/weather\/?$/, '/api/health');
+        } else {
+          healthUrl = healthUrl.replace(/\/$/, '') + '/api/health';
+        }
+        await axiosClient.get(healthUrl, { timeout: 5000 });
       } catch (healthErr) {
         throw new Error('Backend is unavailable. It might be starting up from sleep mode.');
       }
@@ -130,6 +133,49 @@ function WeatherAppContent() {
   useEffect(() => {
     fetchAllWeather();
   }, [fetchAllWeather]);
+
+  // Auto-retry polling when Railway backend is asleep/unavailable
+  useEffect(() => {
+    if (!error) return;
+    
+    const errLower = error.toLowerCase();
+    const isServerError = errLower.includes('unavailable') || errLower.includes('network') || errLower.includes('timeout') || errLower.includes('sleep');
+    
+    if (!isServerError) return;
+
+    const intervalId = setInterval(async () => {
+      try {
+        let healthUrl = axiosClient.defaults.baseURL;
+        if (healthUrl.includes('/api/weather')) {
+          healthUrl = healthUrl.replace(/\/api\/weather\/?$/, '/api/health');
+        } else {
+          healthUrl = healthUrl.replace(/\/$/, '') + '/api/health';
+        }
+        
+        // Use native fetch to bypass axios interceptors for a fast ping
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        
+        const res = await fetch(healthUrl, { 
+          method: 'GET',
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          clearInterval(intervalId);
+          console.log('Backend is awake! Resuming app...');
+          setError(null);
+          fetchAllWeather();
+        }
+      } catch (e) {
+        // Backend still asleep or network down, keep waiting...
+      }
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [error, fetchAllWeather]);
 
   // Dynamic Background style class
   const getBackgroundClass = () => {
