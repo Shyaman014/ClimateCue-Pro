@@ -1,7 +1,20 @@
 import axios from 'axios';
 
-// The base API URL defaults to the VITE_API_URL environment variable.
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://climatecue-pro-production.up.railway.app/api/weather';
+let API_BASE_URL = import.meta.env.VITE_API_URL || 'https://climatecue-pro-production.up.railway.app/api/weather';
+
+// Guarantee that the base URL ends with /api/weather 
+// This fixes production 500 errors if the user configured VITE_API_URL as just the domain.
+if (!API_BASE_URL.includes('/api/weather')) {
+  if (API_BASE_URL.endsWith('/api') || API_BASE_URL.endsWith('/api/')) {
+    API_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, '/api/weather');
+  } else {
+    API_BASE_URL = API_BASE_URL.replace(/\/$/, '') + '/api/weather';
+  }
+}
+// Ensure it ends with a slash so relative routes resolve cleanly
+if (!API_BASE_URL.endsWith('/')) {
+  API_BASE_URL += '/';
+}
 
 const axiosClient = axios.create({
   baseURL: API_BASE_URL,

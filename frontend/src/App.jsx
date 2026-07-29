@@ -71,8 +71,8 @@ function WeatherAppContent() {
       // Removed redundant health check to avoid race conditions with fetchAllWeather
 
       const [favRes, histRes] = await Promise.all([
-        axiosClient.get(`/favorites`),
-        axiosClient.get(`/history`)
+        axiosClient.get('favorites'),
+        axiosClient.get('history')
       ]);
       setFavorites(favRes.data || []);
       setSearchHistory(histRes.data || []);
@@ -109,10 +109,10 @@ function WeatherAppContent() {
         : `city=${encodeURIComponent(city)}`;
 
       const [currentRes, hourlyRes, dailyRes, aqiRes] = await Promise.all([
-        axiosClient.get(`/current?${queryParams}`),
-        axiosClient.get(`/hourly?${queryParams}`),
-        axiosClient.get(`/forecast?${queryParams}`),
-        axiosClient.get(`/air-quality?${queryParams}`)
+        axiosClient.get(`current?${queryParams}`),
+        axiosClient.get(`hourly?${queryParams}`),
+        axiosClient.get(`forecast?${queryParams}`),
+        axiosClient.get(`air-quality?${queryParams}`)
       ]);
 
       setWeatherData(currentRes.data);
@@ -226,7 +226,7 @@ function WeatherAppContent() {
   const handleToggleFavorite = async (weather) => {
     try {
       if (isFavorite) {
-        await axiosClient.delete(`/favorites?cityName=${encodeURIComponent(weather.cityName)}`);
+        await axiosClient.delete(`favorites?cityName=${encodeURIComponent(weather.cityName)}`);
         showToast(`Removed ${weather.cityName} from favorites ⭐`);
       } else {
         const favDto = {
@@ -236,7 +236,7 @@ function WeatherAppContent() {
           longitude: weather.longitude,
           addedAt: Date.now()
         };
-        await axiosClient.post(`/favorites`, favDto);
+        await axiosClient.post(`favorites`, favDto);
         showToast(`Added ${weather.cityName} to favorites! ⭐`);
       }
       fetchPreferences();
@@ -247,7 +247,7 @@ function WeatherAppContent() {
 
   const handleRemoveFavorite = async (cityName) => {
     try {
-      await axiosClient.delete(`/favorites?cityName=${encodeURIComponent(cityName)}`);
+      await axiosClient.delete(`favorites?cityName=${encodeURIComponent(cityName)}`);
       showToast(`Removed ${cityName} from favorites`);
       fetchPreferences();
     } catch (e) {
@@ -257,7 +257,7 @@ function WeatherAppContent() {
 
   const handleClearHistory = async () => {
     try {
-      await axiosClient.delete(`/history`);
+      await axiosClient.delete(`history`);
       setSearchHistory([]);
       showToast('Search history cleared 🗑️');
     } catch (e) {
