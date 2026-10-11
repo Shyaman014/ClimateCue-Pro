@@ -1,5 +1,6 @@
 E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\ClimateCueApplication.java
 E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\config\WebConfig.java
+E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\controller\HealthController.java
 E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\controller\WeatherController.java
 E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\dto\AirQualityDto.java
 E:\Projects\ClimateCue\backend\src\main\java\com\climatecue\dto\DailyForecastDto.java
