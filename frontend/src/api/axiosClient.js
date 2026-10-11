@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-let API_BASE_URL = import.meta.env.VITE_API_URL || 'https://climatecue-pro-production.up.railway.app/api/weather';
+let API_BASE_URL = import.meta.env.VITE_API_URL;
+if (!API_BASE_URL) {
+  API_BASE_URL = import.meta.env.DEV
+    ? 'http://localhost:8081/api/weather'
+    : 'https://climatecue-pro-production.up.railway.app/api/weather';
+}
 
 // Guarantee that the base URL ends with /api/weather 
 // This fixes production 500 errors if the user configured VITE_API_URL as just the domain.

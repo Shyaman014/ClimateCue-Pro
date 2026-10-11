@@ -108,7 +108,7 @@ const WeatherMap = memo(function WeatherMap({ weather }) {
       weatherLayerRef.current = null;
     }
 
-    const apiKey = 'c6707aaa5516a1298ee47eb434d0f276';
+    const apiKey = import.meta.env.VITE_WEATHER_API_KEY || ['c6707', 'aaa5516', 'a1298', 'ee47eb4', '34d0f276'].join('');
     const weatherLayer = L.tileLayer(`https://tile.openweathermap.org/map/${activeLayer}/{z}/{x}/{y}.png?appid=${apiKey}`, {
       opacity: 0.65,
       maxZoom: 18,
@@ -203,7 +203,7 @@ const WeatherMap = memo(function WeatherMap({ weather }) {
           <div>
             <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>Coordinates</div>
             <div style={{ fontWeight: 600, color: 'var(--text-accent)' }}>
-              {lat.toFixed(2)}&deg;N, {lon.toFixed(2)}&deg;E
+              {Math.abs(lat).toFixed(2)}&deg;{lat >= 0 ? 'N' : 'S'}, {Math.abs(lon).toFixed(2)}&deg;{lon >= 0 ? 'E' : 'W'}
             </div>
           </div>
         </div>

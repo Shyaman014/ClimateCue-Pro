@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import axiosClient from './api/axiosClient';
+import { 
+  fetchDirectWeather, 
+  fetchDirectHourly, 
+  fetchDirectDaily, 
+  fetchDirectAqi, 
+  fallbackStorage 
+} from './api/weatherFallback';
 import './index.css';
 
 import { SettingsProvider } from './context/SettingsContext';
@@ -68,16 +75,16 @@ function WeatherAppContent() {
   // Load preferences (favorites & history) on mount
   const fetchPreferences = useCallback(async () => {
     try {
-      // Removed redundant health check to avoid race conditions with fetchAllWeather
-
       const [favRes, histRes] = await Promise.all([
         axiosClient.get('favorites'),
         axiosClient.get('history')
       ]);
-      setFavorites(favRes.data || []);
-      setSearchHistory(histRes.data || []);
+      setFavorites(favRes.data && favRes.data.length > 0 ? favRes.data : fallbackStorage.getFavorites());
+      setSearchHistory(histRes.data || fallbackStorage.getHistory());
     } catch (e) {
-      // Silently fall back if backend preferences are empty or initializing
+      // Fallback to local storage when backend is unavailable
+      setFavorites(fallbackStorage.getFavorites());
+      setSearchHistory(fallbackStorage.getHistory());
     }
   }, []);
 
@@ -90,8 +97,30 @@ function WeatherAppContent() {
     setLoading(true);
     setError(null);
 
+    const loadDirectFallback = async () => {
+      try {
+        const [directCurrent, directHourly, directDaily] = await Promise.all([
+          fetchDirectWeather({ city, lat: coords?.lat, lon: coords?.lon }),
+          fetchDirectHourly({ city, lat: coords?.lat, lon: coords?.lon }),
+          fetchDirectDaily({ city, lat: coords?.lat, lon: coords?.lon })
+        ]);
+        const directAqi = await fetchDirectAqi({ lat: directCurrent.latitude, lon: directCurrent.longitude });
+
+        setWeatherData(directCurrent);
+        setHourlyData(directHourly || []);
+        setDailyData(directDaily || []);
+        setAqiData(directAqi || null);
+
+        fallbackStorage.addHistory(directCurrent.cityName);
+        setSearchHistory(fallbackStorage.getHistory());
+      } catch (fbErr) {
+        throw fbErr;
+      }
+    };
+
     try {
-      // API Health Check
+      // Fast API Health Check
+      let backendHealthy = false;
       try {
         let healthUrl = axiosClient.defaults.baseURL;
         if (healthUrl.includes('/api/weather')) {
@@ -99,9 +128,16 @@ function WeatherAppContent() {
         } else {
           healthUrl = healthUrl.replace(/\/$/, '') + '/api/health';
         }
-        await axiosClient.get(healthUrl, { timeout: 5000 });
+        await axiosClient.get(healthUrl, { timeout: 3000 });
+        backendHealthy = true;
       } catch (healthErr) {
-        throw new Error('Backend is unavailable. It might be starting up from sleep mode.');
+        backendHealthy = false;
+      }
+
+      if (!backendHealthy) {
+        // Backend unavailable -> Seamlessly use Direct Satellite Feed
+        await loadDirectFallback();
+        return;
       }
 
       const queryParams = coords 
@@ -120,11 +156,15 @@ function WeatherAppContent() {
       setDailyData(dailyRes.data || []);
       setAqiData(aqiRes.data || null);
 
-      // Refresh history list after a successful search
       fetchPreferences();
     } catch (err) {
-      const errMsg = err.userFriendlyMessage || err.message || 'Failed to fetch weather data from server';
-      setError(errMsg);
+      // If backend request fails mid-way, attempt direct fallback before showing error
+      try {
+        await loadDirectFallback();
+      } catch (fallbackErr) {
+        const errMsg = err.userFriendlyMessage || fallbackErr.message || err.message || 'Failed to fetch weather data from server';
+        setError(errMsg);
+      }
     } finally {
       setLoading(false);
     }
@@ -226,7 +266,8 @@ function WeatherAppContent() {
   const handleToggleFavorite = async (weather) => {
     try {
       if (isFavorite) {
-        await axiosClient.delete(`favorites?cityName=${encodeURIComponent(weather.cityName)}`);
+        try { await axiosClient.delete(`favorites?cityName=${encodeURIComponent(weather.cityName)}`); } catch {}
+        fallbackStorage.removeFavorite(weather.cityName);
         showToast(`Removed ${weather.cityName} from favorites ⭐`);
       } else {
         const favDto = {
@@ -236,7 +277,8 @@ function WeatherAppContent() {
           longitude: weather.longitude,
           addedAt: Date.now()
         };
-        await axiosClient.post(`favorites`, favDto);
+        try { await axiosClient.post(`favorites`, favDto); } catch {}
+        fallbackStorage.saveFavorite(favDto);
         showToast(`Added ${weather.cityName} to favorites! ⭐`);
       }
       fetchPreferences();
@@ -247,7 +289,8 @@ function WeatherAppContent() {
 
   const handleRemoveFavorite = async (cityName) => {
     try {
-      await axiosClient.delete(`favorites?cityName=${encodeURIComponent(cityName)}`);
+      try { await axiosClient.delete(`favorites?cityName=${encodeURIComponent(cityName)}`); } catch {}
+      fallbackStorage.removeFavorite(cityName);
       showToast(`Removed ${cityName} from favorites`);
       fetchPreferences();
     } catch (e) {
@@ -257,7 +300,8 @@ function WeatherAppContent() {
 
   const handleClearHistory = async () => {
     try {
-      await axiosClient.delete(`history`);
+      try { await axiosClient.delete(`history`); } catch {}
+      fallbackStorage.clearHistory();
       setSearchHistory([]);
       showToast('Search history cleared 🗑️');
     } catch (e) {
