@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="cueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="50%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0ea5e9" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#cueGrad)" />
+  <rect width="64" height="32" rx="16" fill="#ffffff" fill-opacity="0.12" />
+  <g filter="url(#glow)">
+    <path d="M44 34c0-3.9-3.1-7-7-7-.4 0-.9.04-1.3.13C34.3 23.8 30.6 22 26.5 22c-5.2 0-9.5 4.3-9.5 9.5 0 .6.06 1.2.17 1.8C14.9 34.1 13 36.3 13 39c0 3.3 2.7 6 6 6h24c3.9 0 7-3.1 7-7 0-1.8-.7-3.5-1.9-4.7.6-.7.9-1.5.9-2.3z" fill="#ffffff" />
+    <path d="M22 49l-2 5" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" />
+    <path d="M29 49l-2 5" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" />
+    <path d="M36 49l-2 5" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" />
+  </g>
+</svg>
